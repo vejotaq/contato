@@ -1,19 +1,30 @@
 $(document).ready(function () {
-
+   
     $('#carousel-imagens').slick({
         autoplay: true,
-        arrows: false,
-        dots: true,
-        infinite: true
     });
 
 
-    $('#cpf').mask('000.000.000-00');
-    $('#telefone').mask('(00) 00000-0000');
-    $('#cep').mask('00000-000');
+    $('.menu-hamburguer').click(function () {
+        $('nav').slideToggle();
+    });
+
+    $('#telefone').mask('(00) 00000-0000', {
+        placeholder: '(XXX) XXXXX-XXXX'
+    })
 
 
-    $('#form').validate({
+    $('#cpf').mask('000.000.000-00', {
+        placeholder: 'XXX.XXX.XXX-XX'
+    })
+
+
+    $('#cep').mask('00000-000', {
+        placeholder: 'XXXXXX-XXX'
+    })
+
+  
+    $('form').validate({
         rules: {
             nome: {
                 required: true,
@@ -21,47 +32,62 @@ $(document).ready(function () {
             },
             email: {
                 required: true,
-                email: true
+                email: true,
             },
             telefone: {
-                required: true
+                required: true,
+                minlength: 15
             },
-            cpf: {
-                required: true
+            cep: { 
+                required: true,
+                minlength: 9
             },
-            endereco: {
-                required: true
-            },
-            cep: {
-                required: true
+            mensagem: {
+                required: true,
+                minlength: 10
             }
         },
         messages: {
             nome: {
-                required: "Por favor, insira seu nome.",
-                minlength: "O nome deve ter pelo menos 3 caracteres."
+                required: "Por favor, insira seu nome",
+                minlength: "O nome deve ter pelo menos 3 caracteres"
             },
             email: {
-                required: "Por favor, insira um e-mail.",
-                email: "Por favor, insira um e-mail válido."
+                required: "Por favor, insira seu e-mail",
+                email: "Por favor, insira um e-mail válido"
             },
             telefone: {
-                required: "Por favor, insira seu telefone."
+                required: "Por favor, insira seu telefone"
             },
-            cpf: {
-                required: "Por favor, insira seu CPF."
+            veiculoDeInteresse: {
+                required: "Por favor, insira o veículo de interesse"
             },
-            endereco: {
-                required: "Por favor, insira seu endereço."
-            },
-            cep: {
-                required: "Por favor, insira o CEP."
+            mensagem: {
+                required: "Por favor, insira uma mensagem",
+                minlength: "A mensagem deve ter pelo menos 10 caracteres"
             }
         },
-        
         submitHandler: function(form) {
-            alert("Formulário enviado com sucesso!");
+            alert('Formulário enviado com sucesso!');
             form.submit();
+        },
+        invalidHandler: function(event, validator) {
+            let camposIncorretos = validator.numberOfInvalids();
+            if (camposIncorretos) {
+                alert(`Existem ${camposIncorretos} campos incorretos`);
+            }
         }
+    });
+
+    
+    $('.lista-veiculos button').click(function () {
+        const destino = $('#contato');
+        const nomeVeiculo = $(this).parent().find('h3').text();
+
+        $('#veiculo-interesse').val(nomeVeiculo);
+
+        $('html, body').animate({ 
+            scrollTop: destino.offset().top
+        }, 1000);
     });
 });
